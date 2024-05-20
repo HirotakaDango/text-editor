@@ -121,13 +121,7 @@ $files = glob("*.txt");
           }
         } else {
         ?>
-          <div class="col">
-            <div class="card file-card">
-              <div class="card-body">
-                <p class="card-text">No text files found.</p>
-              </div>
-            </div>
-          </div>
+          <h1 class="position-absolute top-50 start-50">No text files found.</h1>
         <?php
         }
         ?>
