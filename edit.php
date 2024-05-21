@@ -55,9 +55,9 @@ if (isset($_GET['file'])) {
         <i class="bi bi-arrow-left"></i>
       </a>
     </div>
-    <div class="container mb-5">
+    <div class="container mt-4 mb-5">
       <form id="editForm">
-        <div class="input-group mb-3">
+        <div class="input-group mb-4">
           <input type="text" class="form-control rounded-4 border-0 shadow p-4 rounded-end-0" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($fileName); ?>" readonly>
           <button class="btn btn-primary fw-medium" type="button" id="saveButton">Save</button>
         </div>

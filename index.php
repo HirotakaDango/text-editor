@@ -121,7 +121,9 @@ $files = glob("*.txt");
           }
         } else {
         ?>
-          <h1 class="position-absolute top-50 start-50">No text files found.</h1>
+          <div class="container">
+            <h1 class="position-absolute top-50 start-50">No text files found.</h1>
+          </div>
         <?php
         }
         ?>

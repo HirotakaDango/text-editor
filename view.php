@@ -33,7 +33,7 @@ $fileContent = file_get_contents($file);
       </a>
     </div>
     <div class="container mb-5">
-      <h1 class="text-center fw-bold mb-4"><?php echo basename($file); ?></h1>
+      <h1 class="text-center fw-bold my-4"><?php echo basename($file); ?></h1>
       <div class="card rounded-4 p-4 shadow border-0">
         <pre><?php echo htmlspecialchars($fileContent); ?></pre>
       </div>
