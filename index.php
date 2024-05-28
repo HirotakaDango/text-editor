@@ -101,6 +101,10 @@ $files = glob("*.txt");
             <div class="col-md-6 col-lg-3 col-sm-12 g-3">
               <div class="card rounded-4 p-1 shadow border-0 h-100">
                 <div class="card-body">
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return confirm('Are you sure you want to delete <?php echo $file; ?>?');">
+                      <input type="hidden" name="file_name" value="<?php echo $file; ?>">
+                      <button type="submit" name="delete" class="btn btn-sm btn-outline-dark border-0 fw-medium mb-2"><i class="bi bi-trash3-fill"></i></button>
+                    </form>
                   <h5 class="fw-medium text-center"><?php echo strlen($file) > 25 ? substr($file, 0, 22) . '...' : $file; ?></h5>
                   <h6 class="fw-medium small mt-4">Last modified:</h6>
                   <h6 class="fw-medium small mt-1"><?php echo $fileModifiedTime; ?></h6>
@@ -109,10 +113,6 @@ $files = glob("*.txt");
                     <a href="<?php echo $file; ?>" download="<?php echo $file; ?>" class="btn btn-sm bg-dark-subtle bg-opacity-25 link-body-emphasis border-0 fw-medium"><i class="bi bi-download"></i></a>
                     <a href="edit.php?file=<?php echo urlencode($file); ?>" class="btn btn-sm bg-dark-subtle bg-opacity-25 link-body-emphasis border-0 fw-medium"><i class="bi bi-pencil-square"></i></a>
                     <a href="#" class="btn btn-sm bg-dark-subtle bg-opacity-25 link-body-emphasis border-0 fw-medium" onclick="renameFile('<?php echo $file; ?>')"><i class="bi bi-input-cursor"></i></a>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return confirm('Are you sure you want to delete <?php echo $file; ?>?');">
-                      <input type="hidden" name="file_name" value="<?php echo $file; ?>">
-                      <button type="submit" name="delete" class="btn btn-sm bg-dark-subtle bg-opacity-25 link-body-emphasis border-0 rounded-start-0 fw-medium"><i class="bi bi-trash3-fill"></i></button>
-                    </form>
                   </div>
                 </div>
               </div>
