@@ -1,36 +1,48 @@
 <?php
+$allowedExtensions = ['txt', 'php', 'html', 'css', 'js'];
+
+function isAllowedExtension($filename) {
+  global $allowedExtensions;
+  $extension = pathinfo($filename, PATHINFO_EXTENSION);
+  return in_array($extension, $allowedExtensions);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_POST["add"])) {
-    // Add new text file
-    $fileName = $_POST["file_name"] . ".txt";
-    $file = fopen($fileName, "w");
-    fclose($file);
+    // Add new file
+    $fileName = $_POST["file_name"];
+    if (isAllowedExtension($fileName)) {
+      $file = fopen($fileName, "w");
+      fclose($file);
+    }
     header("Location: index.php");
     exit();
   } elseif (isset($_POST["upload"])) {
-    // Upload multiple text files
+    // Upload multiple files
     $uploadDir = "./";
     $uploadFiles = $_FILES["files"]["name"];
     $numFiles = count($uploadFiles);
     for ($i = 0; $i < $numFiles; $i++) {
-      $uploadFile = $uploadDir . basename($uploadFiles[$i]);
-      move_uploaded_file($_FILES["files"]["tmp_name"][$i], $uploadFile);
+      if (isAllowedExtension($uploadFiles[$i])) {
+        $uploadFile = $uploadDir . basename($uploadFiles[$i]);
+        move_uploaded_file($_FILES["files"]["tmp_name"][$i], $uploadFile);
+      }
     }
     header("Location: index.php");
     exit();
   } elseif (isset($_POST["delete"])) {
-    // Remove specific text file
+    // Remove specific file
     $fileName = $_POST["file_name"];
-    if (file_exists($fileName)) {
+    if (file_exists($fileName) && isAllowedExtension($fileName)) {
       unlink($fileName);
     }
     header("Location: index.php");
     exit();
   } elseif (isset($_POST["rename"])) {
-    // Rename a text file
+    // Rename a file
     $oldFileName = $_POST["old_file_name"];
     $newFileName = $_POST["new_file_name"];
-    if (file_exists($oldFileName)) {
+    if (file_exists($oldFileName) && isAllowedExtension($newFileName)) {
       rename($oldFileName, $newFileName);
     }
     header("Location: index.php");
@@ -39,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Save edited file content
     $fileName = basename($_POST['file']);
     $fileContent = $_POST['content'];
-    if (file_exists($fileName)) {
+    if (file_exists($fileName) && isAllowedExtension($fileName)) {
       file_put_contents($fileName, $fileContent);
       echo "File saved successfully.";
     } else {
@@ -53,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // View file
 if (isset($_GET['view'])) {
   $file = $_GET['view'];
-  if (!$file || !file_exists($file)) {
+  if (!$file || !file_exists($file) || !isAllowedExtension($file)) {
     http_response_code(404);
     echo "<h1>File Not Found</h1>";
     exit;
@@ -65,7 +77,7 @@ if (isset($_GET['view'])) {
 // Edit file
 if (isset($_GET['edit'])) {
   $fileName = basename($_GET['edit']);
-  if (file_exists($fileName)) {
+  if (file_exists($fileName) && isAllowedExtension($fileName)) {
     $fileContent = file_get_contents($fileName);
     $editMode = true;
   } else {
@@ -78,7 +90,7 @@ if (isset($_GET['download'])) {
   $file = $_GET['download'];
   $filepath = './' . $file;
 
-  if (file_exists($filepath)) {
+  if (file_exists($filepath) && isAllowedExtension($filepath)) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename="'.basename($filepath).'"');
@@ -98,14 +110,16 @@ if (isset($_GET['download'])) {
 if (isset($_GET['batch']) && $_GET['batch'] == 'all') {
     $zip = new ZipArchive();
     $zipName = 'batch_' . date('Y-m-d') . '.zip';
-    
+
     if ($zip->open($zipName, ZipArchive::CREATE) === TRUE) {
-        $files = glob("*.txt");
+        $files = array_merge(
+          glob("*.txt"), glob("*.php"), glob("*.html"), glob("*.css"), glob("*.js")
+        );
         foreach ($files as $file) {
             $zip->addFile($file, basename($file));
         }
         $zip->close();
-        
+
         header('Content-Type: application/zip');
         header('Content-disposition: attachment; filename=' . $zipName);
         header('Content-Length: ' . filesize($zipName));
@@ -118,8 +132,10 @@ if (isset($_GET['batch']) && $_GET['batch'] == 'all') {
     }
 }
 
-// Get all text files in the current directory
-$files = glob("*.txt");
+// Get all allowed files in the current directory
+$files = array_merge(
+  glob("*.txt"), glob("*.php"), glob("*.html"), glob("*.css"), glob("*.js")
+);
 ?>
 
 <!DOCTYPE html>
@@ -127,7 +143,17 @@ $files = glob("*.txt");
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Files Viewer</title>
+    <title>
+      <?php
+      if (isset($_GET['edit'])) {
+        echo 'Edit ' . $_GET['edit'];
+      } elseif (isset($_GET['view'])) {
+        echo 'View ' . $_GET['view'];
+      } else {
+        echo 'Text Editor';
+      }
+      ?>
+    </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
@@ -169,7 +195,7 @@ $files = glob("*.txt");
         function saveFile() {
           const fileName = '<?php echo $fileName; ?>';
           const fileContent = document.getElementById('fileContent').value;
-          
+
           const xhr = new XMLHttpRequest();
           xhr.open('POST', '', true);
           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -196,9 +222,7 @@ $files = glob("*.txt");
                 <div class="container">
                   <h2 class="my-4 text-center fw-bold">Add New Text File</h2>
                   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                    <div class="mb-3">
-                      <input type="text" class="form-control" placeholder="File Name" name="file_name" required>
-                    </div>
+                    <input type="text" class="form-control" placeholder="File Name" name="file_name" required>
                     <button type="submit" name="add" class="btn btn-primary w-100 fw-medium">Add</button>
                   </form>
                 </div>
