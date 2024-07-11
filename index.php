@@ -7,11 +7,27 @@ function isAllowedExtension($filename) {
   return in_array($extension, $allowedExtensions);
 }
 
+function generateUniqueFileName($filename) {
+  $baseName = pathinfo($filename, PATHINFO_FILENAME);
+  $extension = pathinfo($filename, PATHINFO_EXTENSION);
+  $counter = 1;
+
+  // Append _1, _2, ... until a unique name is found
+  while (file_exists($baseName . '_' . $counter . '.' . $extension)) {
+    $counter++;
+  }
+
+  return $baseName . '_' . $counter . '.' . $extension;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_POST["add"])) {
     // Add new file
     $fileName = $_POST["file_name"];
     if (isAllowedExtension($fileName)) {
+      if (file_exists($fileName)) {
+        $fileName = generateUniqueFileName($fileName);
+      }
       $file = fopen($fileName, "w");
       fclose($file);
     }
@@ -23,9 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $uploadFiles = $_FILES["files"]["name"];
     $numFiles = count($uploadFiles);
     for ($i = 0; $i < $numFiles; $i++) {
-      if (isAllowedExtension($uploadFiles[$i])) {
-        $uploadFile = $uploadDir . basename($uploadFiles[$i]);
-        move_uploaded_file($_FILES["files"]["tmp_name"][$i], $uploadFile);
+      $uploadFileName = $uploadFiles[$i];
+      if (isAllowedExtension($uploadFileName)) {
+        $uploadFilePath = $uploadDir . $uploadFileName;
+        if (file_exists($uploadFilePath)) {
+          $uploadFileName = generateUniqueFileName($uploadFileName);
+          $uploadFilePath = $uploadDir . $uploadFileName;
+        }
+        move_uploaded_file($_FILES["files"]["tmp_name"][$i], $uploadFilePath);
       }
     }
     header("Location: index.php");
@@ -220,15 +241,17 @@ $files = array_merge(
               <div class="modal-body">
                 <!-- Add New Text File -->
                 <div class="container">
-                  <h2 class="my-4 text-center fw-bold">Add New Text File</h2>
+                  <h2 class="my-4 text-center fw-bold">Add New File</h2>
                   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                    <input type="text" class="form-control" placeholder="File Name" name="file_name" required>
+                    <div class="mb-3">
+                      <input type="text" class="form-control" placeholder="File Name" name="file_name" required>
+                    </div>
                     <button type="submit" name="add" class="btn btn-primary w-100 fw-medium">Add</button>
                   </form>
                 </div>
                 <!-- Upload Multiple Text Files -->
                 <div class="container mb-3">
-                  <h2 class="my-4 text-center fw-bold">Upload Multiple Text Files</h2>
+                  <h2 class="my-4 text-center fw-bold">Upload Multiple Files</h2>
                   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                       <input type="file" class="form-control" name="files[]" multiple required>
