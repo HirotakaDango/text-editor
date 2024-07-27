@@ -177,59 +177,47 @@ $files = array_merge(
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
   </head>
   <body>
     <?php if (isset($viewMode)): ?>
-      <div class="container-fluid">
-        <a class="btn btn-primary mt-2 fw-medium" href="index.php">
-          <i class="bi bi-arrow-left"></i>
-        </a>
-      </div>
-      <div class="container mt-4 mb-5">
-        <input type="text" class="form-control rounded-4 border-0 shadow p-4 mb-4" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($file); ?>" readonly>
-        <textarea class="form-control vh-100 w-100 mb-3 p-4 border-0 rounded-4 shadow" readonly><?php echo htmlspecialchars($fileContent); ?></textarea>
+      <div class="container">
+        <div class="input-group">
+          <a class="btn btn-primary fw-medium" href="index.php"><i class="bi bi-arrow-left"></i></a>
+          <input type="text" class="form-control border-0 py-2 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($file); ?>" readonly>
+        </div>
+        <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
       </div>
     <?php elseif (isset($editMode)): ?>
-      <div class="container-fluid">
-        <a class="btn btn-primary mt-2 fw-medium" href="index.php">
-          <i class="bi bi-arrow-left"></i>
-        </a>
-      </div>
-      <div class="container mt-4 mb-5">
-        <form id="editForm">
-          <div class="input-group mb-4">
-            <input type="text" class="form-control rounded-4 border-0 shadow p-4 rounded-end-0" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($fileName); ?>" readonly>
-            <button class="btn btn-primary fw-medium" type="button" id="saveButton">Save</button>
-          </div>
-          <textarea class="form-control vh-100 w-100 mb-3 p-4 border-0 rounded-4 shadow" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
-        </form>
-      </div>
-      <script>
-        document.getElementById('saveButton').addEventListener('click', saveFile);
-        document.addEventListener('keydown', function(event) {
-          if (event.ctrlKey && event.key === 's') {
-            event.preventDefault();
-            saveFile();
+    <div class="container">
+      <form id="editForm">
+        <div class="input-group">
+          <a class="btn btn-primary fw-medium" href="index.php"><i class="bi bi-arrow-left"></i></a>
+          <input type="text" class="form-control border-0 py-2 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($fileName); ?>" readonly>
+        </div>
+        <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
+      </form>
+    </div>
+    <script>
+      document.getElementById('fileContent').addEventListener('input', saveFile);
+
+      function saveFile() {
+        const fileName = '<?php echo $fileName; ?>';
+        const fileContent = document.getElementById('fileContent').value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+          if (xhr.status !== 200) {
+            console.error('Error saving file.');
           }
-        });
-
-        function saveFile() {
-          const fileName = '<?php echo $fileName; ?>';
-          const fileContent = document.getElementById('fileContent').value;
-
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '', true);
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              alert('File saved successfully.');
-            } else {
-              alert('Error saving file.');
-            }
-          };
-          xhr.send('file=' + encodeURIComponent(fileName) + '&content=' + encodeURIComponent(fileContent));
-        }
-      </script>
+        };
+        xhr.send('file=' + encodeURIComponent(fileName) + '&content=' + encodeURIComponent(fileContent));
+      }
+    </script>
     <?php else: ?>
       <div class="container-fluid">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -283,7 +271,7 @@ $files = array_merge(
               $fileModifiedTime = date("l, d F, Y", filemtime($file));
           ?>
               <div class="col-md-6 col-lg-3 col-sm-12 g-3">
-                <div class="card rounded-4 p-1 shadow border-0 h-100">
+                <div class="card rounded-4 p-1 shadow border-0 h-100 bg-light-subtle">
                   <div class="card-body position-relative">
                     <h5 class="fw-medium text-center"><?php echo strlen($file) > 25 ? substr($file, 0, 22) . '...' : $file; ?></h5>
                     <h6 class="fw-medium small mt-4">Last modified:</h6>
