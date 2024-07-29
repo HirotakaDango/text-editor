@@ -228,7 +228,7 @@ $files = array_merge(
         }
       </script>
     <?php else: ?>
-      <div class="container-fluid">
+      <div class="container">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 border-0 shadow">
@@ -261,7 +261,7 @@ $files = array_merge(
           </div>
         </div>
       </div>
-      <div class="container-fluid mb-5">
+      <div class="container mb-5">
         <h1 class="my-4 text-center fw-bold"><?php echo basename(getcwd()); ?></h1>
         <div class="btn-group mt-2">
           <button type="button" class="btn btn-primary fw-medium" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -271,7 +271,7 @@ $files = array_merge(
             <i class="bi bi-download"></i> batch
           </a>
         </div>
-        <div class="row">
+        <div class="row row-cols-2 row-cols-md-4 g-1 mt-2">
           <?php
           // Check if there are any text files
           if (count($files) > 0) {
@@ -279,7 +279,7 @@ $files = array_merge(
             foreach ($files as $file) {
               $fileModifiedTime = date("l, d F, Y", filemtime($file));
           ?>
-              <div class="col-md-12 g-3">
+              <div class="col">
                 <div class="card rounded-4 p-1 shadow border-0 h-100 bg-light-subtle">
                   <div class="card-body position-relative">
                     <h5 class="fw-medium text-center"><?php echo strlen($file) > 25 ? substr($file, 0, 22) . '...' : $file; ?></h5>
