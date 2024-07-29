@@ -191,33 +191,42 @@ $files = array_merge(
         <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
       </div>
     <?php elseif (isset($editMode)): ?>
-    <div class="container">
-      <form id="editForm">
-        <div class="input-group">
-          <a class="btn btn-primary fw-medium" href="index.php"><i class="bi bi-arrow-left"></i></a>
-          <input type="text" class="form-control border-0 py-2 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($fileName); ?>" readonly>
-        </div>
-        <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
-      </form>
-    </div>
-    <script>
-      document.getElementById('fileContent').addEventListener('input', saveFile);
-
-      function saveFile() {
-        const fileName = '<?php echo $fileName; ?>';
-        const fileContent = document.getElementById('fileContent').value;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-          if (xhr.status !== 200) {
-            console.error('Error saving file.');
+      <div class="container">
+        <form id="editForm">
+          <div class="input-group">
+            <a class="btn btn-primary fw-medium" href="index.php"><i class="bi bi-arrow-left"></i></a>
+            <input type="text" class="form-control border-0 py-2 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($fileName); ?>" readonly>
+            <button class="btn btn-primary fw-medium" type="button" id="saveButton"><i class="bi bi-floppy-fill"></i></button>
+          </div>
+          <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
+        </form>
+      </div>
+      <script>
+        document.getElementById('saveButton').addEventListener('click', saveFile);
+        document.addEventListener('keydown', function(event) {
+          if (event.ctrlKey && event.key === 's') {
+            event.preventDefault();
+            saveFile();
           }
-        };
-        xhr.send('file=' + encodeURIComponent(fileName) + '&content=' + encodeURIComponent(fileContent));
-      }
-    </script>
+        });
+
+        function saveFile() {
+          const fileName = '<?php echo $fileName; ?>';
+          const fileContent = document.getElementById('fileContent').value;
+
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '', true);
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              alert('File saved successfully.');
+            } else {
+              alert('Error saving file.');
+            }
+          };
+          xhr.send('file=' + encodeURIComponent(fileName) + '&content=' + encodeURIComponent(fileContent));
+        }
+      </script>
     <?php else: ?>
       <div class="container-fluid">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -252,7 +261,7 @@ $files = array_merge(
           </div>
         </div>
       </div>
-      <div class="container mb-5">
+      <div class="container-fluid mb-5">
         <h1 class="my-4 text-center fw-bold"><?php echo basename(getcwd()); ?></h1>
         <div class="btn-group mt-2">
           <button type="button" class="btn btn-primary fw-medium" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -270,7 +279,7 @@ $files = array_merge(
             foreach ($files as $file) {
               $fileModifiedTime = date("l, d F, Y", filemtime($file));
           ?>
-              <div class="col-md-6 col-lg-3 col-sm-12 g-3">
+              <div class="col-md-12 g-3">
                 <div class="card rounded-4 p-1 shadow border-0 h-100 bg-light-subtle">
                   <div class="card-body position-relative">
                     <h5 class="fw-medium text-center"><?php echo strlen($file) > 25 ? substr($file, 0, 22) . '...' : $file; ?></h5>
