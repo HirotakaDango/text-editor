@@ -188,7 +188,7 @@ $files = array_merge(
           <a class="btn btn-primary fw-medium" href="index.php"><i class="bi bi-arrow-left"></i></a>
           <input type="text" class="form-control border-0 py-2 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($file); ?>" readonly>
         </div>
-        <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" readonly><?php echo htmlspecialchars($fileContent); ?></textarea>
+        <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100svh - 44px); max-height: calc(100svh - 44px); min-height: calc(100svh - 44px); box-sizing: border-box;" readonly><?php echo htmlspecialchars($fileContent); ?></textarea>
       </div>
     <?php elseif (isset($editMode)): ?>
       <div class="container">
@@ -198,7 +198,7 @@ $files = array_merge(
             <input type="text" class="form-control border-0 py-2 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo htmlspecialchars($fileName); ?>" readonly>
             <button class="btn btn-primary fw-medium" type="button" id="saveButton"><i class="bi bi-floppy-fill"></i></button>
           </div>
-          <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px); min-height: calc(100vh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
+          <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100svh - 44px); max-height: calc(100svh - 44px); min-height: calc(100svh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
         </form>
       </div>
       <script>
