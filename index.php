@@ -186,7 +186,7 @@ $files = array_merge(
       <div class="container-fluid px-0 w-100">
         <div class="row g-0">
           <div class="col-md-3 d-none d-md-block">
-            <div class="px-2 overflow-auto vh-100 py-2" style="scrollbar-width: none;">
+            <div class="px-2 overflow-auto vh-100 py-2">
               <!-- Sidebar for file list -->
               <div class="list-group">
                 <?php
@@ -217,7 +217,7 @@ $files = array_merge(
       <div class="container-fluid px-0 w-100">
         <div class="row g-0">
           <div class="col-md-3 d-none d-md-block">
-            <div class="px-2 overflow-auto vh-100 py-2" style="scrollbar-width: none;">
+            <div class="px-2 overflow-auto vh-100 py-2">
               <!-- Sidebar for file list -->
               <div class="list-group">
                 <?php
