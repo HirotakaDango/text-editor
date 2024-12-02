@@ -206,8 +206,8 @@ $files = array_merge(
             <div class="input-group rounded-0">
               <a class="btn btn-primary fw-medium rounded-0" href="./"><i class="bi bi-arrow-left"></i></a>
               <input type="text" class="form-control border-0 py-2 rounded-0 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Filename" value="<?php echo $file; ?>" readonly>
-              <a class="btn btn-primary fw-medium rounded-0" href="<?php echo $_GET['view']; ?>" download><i class="bi bi-download"></i></a>
-              <a class="btn btn-primary fw-medium rounded-0" href="?edit=<?php echo $_GET['view']; ?>"><i class="bi bi-pencil-fill"></i></a>
+              <a class="btn btn-primary fw-medium rounded-0" href="./?download=<?php echo urlencode($_GET['view']); ?>"><i class="bi bi-download"></i></a>
+              <a class="btn btn-primary fw-medium rounded-0" href="?edit=<?php echo urlencode($_GET['view']); ?>"><i class="bi bi-pencil-fill"></i></a>
             </div>
             <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100svh - 44px); max-height: calc(100svh - 44px); min-height: calc(100svh - 44px); box-sizing: border-box;" readonly><?php echo htmlspecialchars($fileContent); ?></textarea>
           </div>
@@ -238,9 +238,9 @@ $files = array_merge(
             <form id="editForm">
               <div class="input-group rounded-0">
                 <a class="btn btn-primary fw-medium rounded-0" href="./"><i class="bi bi-arrow-left"></i></a>
-                <a class="btn btn-primary fw-medium rounded-0" href="?view=<?php echo $_GET['edit']; ?>"><i class="bi bi-eye-fill"></i></a>
+                <a class="btn btn-primary fw-medium rounded-0" href="?view=<?php echo urlencode($_GET['edit']); ?>"><i class="bi bi-eye-fill"></i></a>
                 <input type="text" class="form-control border-0 py-2 rounded-0 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo $_GET['edit']; ?>" readonly>
-                <a class="btn btn-primary fw-medium rounded-0" href="<?php echo $_GET['edit']; ?>" download><i class="bi bi-download"></i></a>
+                <a class="btn btn-primary fw-medium rounded-0" href="./?download=<?php echo urlencode($_GET['edit']); ?>"><i class="bi bi-download"></i></a>
                 <button class="btn btn-primary fw-medium rounded-0" type="button" id="saveButton"><i class="bi bi-floppy-fill"></i></button>
               </div>
               <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100svh - 44px); max-height: calc(100svh - 44px); min-height: calc(100svh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
