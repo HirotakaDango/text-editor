@@ -205,7 +205,7 @@ $files = array_merge(
           <div class="col-md-9">
             <div class="input-group rounded-0">
               <a class="btn btn-primary fw-medium rounded-0" href="./"><i class="bi bi-arrow-left"></i></a>
-              <input type="text" class="form-control border-0 py-2 rounded-0 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Filename" value="<?php echo $file; ?>" readonly>
+              <input type="text" class="form-control border-0 py-2 rounded-0 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Filename" value="<?php echo $_GET['view']; ?>" readonly>
               <a class="btn btn-primary fw-medium rounded-0" href="./?download=<?php echo urlencode($_GET['view']); ?>"><i class="bi bi-download"></i></a>
               <a class="btn btn-primary fw-medium rounded-0" href="?edit=<?php echo urlencode($_GET['view']); ?>"><i class="bi bi-pencil-fill"></i></a>
             </div>
