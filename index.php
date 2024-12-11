@@ -347,7 +347,7 @@ $files = array_merge(
                     <h6 class="fw-medium small mt-1"><?php echo $fileModifiedTime; ?></h6>
                     <h6 class="fw-medium small mt-4">Size:</h6>
                     <h6 class="fw-medium small mt-1"><?php echo $formattedSize; ?></h6>
-                    <div class="dropdown position-absolute top-0 start-0">
+                    <div class="dropdown position-absolute top-0 end-0">
                       <button class="btn p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical link-body-emphasis"></i>
                       </button>
