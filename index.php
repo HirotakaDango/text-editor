@@ -527,8 +527,8 @@ foreach ($pathSegments as $index => $segment) {
                 <div>
                   <div class="list-group-item-filename">
                     <i class="bi bi-folder-fill me-2"></i>
-                    <a href="?path=<?php echo urlencode($currentPath . '/' . $folder); ?>" class="link-body-emphasis text-decoration-none" style="margin-left: -22px; padding-left: 22px; margin-right: 5px; padding-right: 5px; line-height: 1.7;">
-                      <span class="fw-medium"><?php echo $folder; ?></span>
+                    <a href="?path=<?php echo urlencode($currentPath . '/' . $folder); ?>" class="link-body-emphasis text-decoration-none text-truncate" style="margin-left: -22px; padding-left: 22px; margin-right: 5px; padding-right: 5px; line-height: 1.7;">
+                      <span class="fw-medium text-truncate"><?php echo $folder; ?></span>
                     </a>
                   </div>
                   <h6 class="file-info small mt-2"><?php echo $folderModifiedTime; ?></h6>
@@ -575,7 +575,7 @@ foreach ($pathSegments as $index => $segment) {
                 <div>
                   <div class="list-group-item-filename">
                     <i class="bi bi-file-earmark-text me-2"></i>
-                    <span class="fw-medium"><?php echo $file; ?></span>
+                    <span class="fw-medium text-truncate"><?php echo $file; ?></span>
                   </div>
                   <h6 class="file-info small mt-2"><?php echo $fileModifiedTime; ?></h6>
                   <h6 class="file-info small"><?php echo $formattedSize; ?></h6>
