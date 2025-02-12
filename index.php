@@ -522,7 +522,7 @@ foreach ($pathSegments as $index => $segment) {
             $folderPath = $absoluteCurrentPath . '/' . $folder;
             $folderModifiedTime = date("l, d F, Y", filemtime($folderPath));
             ?>
-            <li class="list-group-item bg-body-tertiary rounded-4 my-1 shadow">
+            <li class="list-group-item border bg-body-tertiary rounded-4 my-1 shadow">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <div class="list-group-item-filename">
@@ -531,7 +531,7 @@ foreach ($pathSegments as $index => $segment) {
                       <span class="fw-medium"><?php echo $folder; ?></span>
                     </a>
                   </div>
-                  <small class="file-info">Last modified: <?php echo $folderModifiedTime; ?></small>
+                  <h6 class="file-info small mt-2"><?php echo $folderModifiedTime; ?></h6>
                 </div>
                 <div class="dropdown">
                   <button class="btn btn-sm p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -570,14 +570,15 @@ foreach ($pathSegments as $index => $segment) {
               $formattedSize = round($fileSize / 1073741824, 2) . ' GB';
             }
             ?>
-            <li class="list-group-item bg-light-subtle rounded-4 my-1 shadow">
+            <li class="list-group-item border bg-light-subtle rounded-4 my-1 shadow">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <div class="list-group-item-filename">
                     <i class="bi bi-file-earmark-text me-2"></i>
                     <span class="fw-medium"><?php echo $file; ?></span>
                   </div>
-                  <small class="file-info">Last modified: <?php echo $fileModifiedTime; ?>, Size: <?php echo $formattedSize; ?></small>
+                  <h6 class="file-info small mt-2"><?php echo $fileModifiedTime; ?></h6>
+                  <h6 class="file-info small"><?php echo $formattedSize; ?></h6>
                 </div>
                 <div class="dropdown">
                   <button class="btn btn-sm p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
