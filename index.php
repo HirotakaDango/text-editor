@@ -524,7 +524,7 @@ foreach ($pathSegments as $index => $segment) {
             ?>
             <li class="list-group-item border bg-body-tertiary rounded-4 my-1 shadow">
               <div class="d-flex justify-content-between align-items-center">
-                <div>
+                <div class="text-truncate">
                   <div class="list-group-item-filename">
                     <i class="bi bi-folder-fill me-2"></i>
                     <a href="?path=<?php echo urlencode($currentPath . '/' . $folder); ?>" class="link-body-emphasis text-decoration-none text-truncate" style="margin-left: -22px; padding-left: 22px; margin-right: 5px; padding-right: 5px; line-height: 1.7;">
@@ -572,7 +572,7 @@ foreach ($pathSegments as $index => $segment) {
             ?>
             <li class="list-group-item border bg-light-subtle rounded-4 my-1 shadow">
               <div class="d-flex justify-content-between align-items-center">
-                <div>
+                <div class="text-truncate">
                   <div class="list-group-item-filename">
                     <i class="bi bi-file-earmark-text me-2"></i>
                     <span class="fw-medium text-truncate"><?php echo $file; ?></span>
@@ -586,8 +586,8 @@ foreach ($pathSegments as $index => $segment) {
                   </button>
                   <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow border-0">
                     <li><a href="?path=<?php echo urlencode($currentPath); ?>&view=<?php echo urlencode($file); ?>" class="dropdown-item"><i class="bi bi-eye-fill"></i> view</a></li>
-                    <li><a href="?path=<?php echo urlencode($currentPath); ?>&download=<?php echo urlencode($file); ?>" class="dropdown-item"><i class="bi bi-download"></i> download</a></li>
                     <li><a href="?path=<?php echo urlencode($currentPath); ?>&edit=<?php echo urlencode($file); ?>" class="dropdown-item"><i class="bi bi-pencil-square"></i> edit</a></li>
+                    <li><a href="?path=<?php echo urlencode($currentPath); ?>&download=<?php echo urlencode($file); ?>" class="dropdown-item"><i class="bi bi-download"></i> download</a></li>
                     <li><a href="#" class="dropdown-item" onclick="renameItem('<?php echo $file; ?>', false)"><i class="bi bi-input-cursor"></i> rename file</a></li>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?path=<?php echo urlencode(ltrim(str_replace($baseDir, '', $absoluteCurrentPath), '/')); ?>" method="post" onsubmit="return confirm('Are you sure you want to delete <?php echo $file; ?>?');">
                       <input type="hidden" name="file_name" value="<?php echo $file; ?>">
