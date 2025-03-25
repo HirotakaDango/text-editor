@@ -420,12 +420,12 @@ foreach ($pathSegments as $index => $segment) {
                 <i class="bi bi-arrow-counterclockwise"></i>
               </button>
               <input type="text" class="form-control border-0 py-2 rounded-0 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo $_GET['edit']; ?>" readonly>
-              <a class="btn btn-primary fw-medium rounded-0" href="./?path=<?php echo urlencode($currentPath); ?>&download=<?php echo urlencode($_GET['edit']); ?>">
-                <i class="bi bi-download"></i>
-              </a>
               <button type="button" id="redoButton" class="btn btn-primary fw-medium rounded-0">
                 <i class="bi bi-arrow-clockwise"></i>
               </button>
+              <a class="btn btn-primary fw-medium rounded-0" href="./?path=<?php echo urlencode($currentPath); ?>&download=<?php echo urlencode($_GET['edit']); ?>">
+                <i class="bi bi-download"></i>
+              </a>
               <button class="btn btn-primary fw-medium rounded-0" type="button" id="saveButton">
                 <i class="bi bi-floppy-fill"></i>
               </button>
