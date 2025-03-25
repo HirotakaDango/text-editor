@@ -410,11 +410,25 @@ foreach ($pathSegments as $index => $segment) {
         <div class="col-md-9">
           <form id="editForm">
             <div class="input-group rounded-0">
-              <a class="btn btn-primary fw-medium rounded-0" href="./?path=<?php echo urlencode(ltrim(str_replace($baseDir, '', $absoluteCurrentPath), '/')); ?>"><i class="bi bi-arrow-left"></i></a>
-              <a class="btn btn-primary fw-medium rounded-0" href="?path=<?php echo urlencode($currentPath); ?>&view=<?php echo urlencode($_GET['edit']); ?>"><i class="bi bi-eye-fill"></i></a>
+              <a class="btn btn-primary fw-medium rounded-0" href="./?path=<?php echo urlencode(ltrim(str_replace($baseDir, '', $absoluteCurrentPath), '/')); ?>">
+                <i class="bi bi-arrow-left"></i>
+              </a>
+              <a class="btn btn-primary fw-medium rounded-0" href="?path=<?php echo urlencode($currentPath); ?>&view=<?php echo urlencode($_GET['edit']); ?>">
+                <i class="bi bi-eye-fill"></i>
+              </a>
+              <button type="button" id="undoButton" class="btn btn-primary fw-medium rounded-0">
+                <i class="bi bi-arrow-counterclockwise"></i>
+              </button>
               <input type="text" class="form-control border-0 py-2 rounded-0 bg-light-subtle focus-ring focus-ring-dark" placeholder="Edit filename" aria-label="Edit filename" value="<?php echo $_GET['edit']; ?>" readonly>
-              <a class="btn btn-primary fw-medium rounded-0" href="./?path=<?php echo urlencode($currentPath); ?>&download=<?php echo urlencode($_GET['edit']); ?>"><i class="bi bi-download"></i></a>
-              <button class="btn btn-primary fw-medium rounded-0" type="button" id="saveButton"><i class="bi bi-floppy-fill"></i></button>
+              <a class="btn btn-primary fw-medium rounded-0" href="./?path=<?php echo urlencode($currentPath); ?>&download=<?php echo urlencode($_GET['edit']); ?>">
+                <i class="bi bi-download"></i>
+              </a>
+              <button type="button" id="redoButton" class="btn btn-primary fw-medium rounded-0">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+              <button class="btn btn-primary fw-medium rounded-0" type="button" id="saveButton">
+                <i class="bi bi-floppy-fill"></i>
+              </button>
             </div>
             <textarea class="form-control w-100 p-2 border-0 focus-ring focus-ring-dark" style="height: calc(100svh - 44px); max-height: calc(100svh - 44px); min-height: calc(100svh - 44px); box-sizing: border-box;" id="fileContent"><?php echo htmlspecialchars($fileContent); ?></textarea>
           </form>
@@ -423,6 +437,7 @@ foreach ($pathSegments as $index => $segment) {
     </div>
 
     <script>
+      // Save file functionality remains unchanged.
       document.getElementById('saveButton').addEventListener('click', saveFile);
       document.addEventListener('keydown', function(event) {
         if (event.ctrlKey && event.key === 's') {
@@ -447,12 +462,50 @@ foreach ($pathSegments as $index => $segment) {
         };
         xhr.send('file=' + encodeURIComponent(fileName) + '&content=' + encodeURIComponent(fileContent));
       }
+
+      // Undo/Redo functionality
+      let undoStack = [];
+      let redoStack = [];
+      const fileContentElement = document.getElementById('fileContent');
+      let lastValue = fileContentElement.value;
+
+      // Listen for changes and push the last state to the undo stack.
+      fileContentElement.addEventListener('input', function() {
+        // Push the last value onto the undo stack.
+        undoStack.push(lastValue);
+        // Update lastValue with the new value.
+        lastValue = fileContentElement.value;
+        // Clear the redo stack on new input.
+        redoStack = [];
+      });
+
+      function undoAction() {
+        if (undoStack.length > 0) {
+          // Push the current state into the redo stack.
+          redoStack.push(fileContentElement.value);
+          // Retrieve the previous state.
+          const previousValue = undoStack.pop();
+          fileContentElement.value = previousValue;
+          lastValue = previousValue;
+        }
+      }
+
+      function redoAction() {
+        if (redoStack.length > 0) {
+          // Push the current state into the undo stack.
+          undoStack.push(fileContentElement.value);
+          // Retrieve the next state.
+          const nextValue = redoStack.pop();
+          fileContentElement.value = nextValue;
+          lastValue = nextValue;
+        }
+      }
+
+      // Add click event listeners for Undo and Redo buttons.
+      document.getElementById('undoButton').addEventListener('click', undoAction);
+      document.getElementById('redoButton').addEventListener('click', redoAction);
     </script>
   <?php else: ?>
-    <div class="container-fluid px-0">
-    </div>
-
-
     <div class="container mb-5">
       <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb bg-body-tertiary rounded-3 py-2 px-3">
